@@ -57,8 +57,10 @@ class VersionController extends Controller
 
         $version->save();
 
-        $version->createRelease($package);
+        $version->refresh();
 
-        return response()->json($version);
+        $filePath = $version->createRelease($package);
+
+        return response()->json([$version, $filePath]);
     }
 }
