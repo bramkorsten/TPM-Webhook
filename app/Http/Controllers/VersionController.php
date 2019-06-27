@@ -45,6 +45,10 @@ class VersionController extends Controller
 
         $payload = $payload->release;
 
+        if (Version::where('package_id', $package->id)->where('version', $payload->tag_name)->first()) {
+            return response()->json(['error' => 'A release has already been made for version: ' . $payload->tag_name], 409);
+        }
+
         $version = new Version();
 
         $version->package_id = $package->id;
@@ -61,6 +65,8 @@ class VersionController extends Controller
 
         $filePath = $version->createRelease($package);
 
-        return response()->json([$version, $filePath]);
+        $version->refresh();
+
+        return response()->json($version);
     }
 }
