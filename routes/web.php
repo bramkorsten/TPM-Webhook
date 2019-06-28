@@ -16,8 +16,11 @@ $router->group(['prefix'=>'api/v1'], function() use($router){
         return $router->app->version();
     });
 
+    $router->get('/install', 'UserController@install');
+
     // Routing for all routes related to packages
-    $router->group(['prefix'=>'packages'], function() use($router){
+    $router->group(['prefix'=>'packages', 'middleware' => 'auth:api'], function() use($router)
+    {
         $router->get('/', 'PackageController@index');
         $router->post('/', 'PackageController@create');
         $router->get('/{id}', 'PackageController@show');
@@ -28,6 +31,11 @@ $router->group(['prefix'=>'api/v1'], function() use($router){
         $router->get('/{id}/versions', 'versionController@index');
         $router->get('/{id}/versions/latest', 'versionController@latest');
         $router->post('/{id}/versions', 'versionController@create');
+    });
+
+    $router->group(['prefix'=>'users'], function () use($router)
+    {
+        $router->get('/', 'UserController@index');
     });
 
 });

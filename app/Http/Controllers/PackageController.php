@@ -55,9 +55,10 @@ class PackageController extends Controller
     }
 
     public function destroy($id)
-     {
+    {
         $package = Package::find($id);
         $package->delete();
          return response()->json('Done!');
-     }
+    }
+
 }
